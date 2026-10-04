@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>maimai DX 課題曲生成器 - 截圖完美對齊版</title>
-    <!-- 引入多種可選字體 -->
+    <title>maimai DX 課題曲生成器 - 本地記憶版</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Noto+Sans+JP:wght@700;900&family=Zen+Maru+Gothic:wght@700;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
-        body { margin: 0; padding: 0; background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #fbc2eb); background-size: 400% 400%; animation: gradientBG 15s ease infinite; font-family: 'Noto Sans JP', sans-serif; overflow-x: hidden; color: #4a235a; }
+        body { margin: 0; padding: 0; background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #fbc2eb); background-size: 400% 400%; animation: gradientBG 15s ease infinite; font-family: 'Noto Sans JP', sans-serif; color: #4a235a; }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        #preview-wrapper { width: 100%; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: center; align-items: flex-start; padding-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow: hidden; }
+        #preview-wrapper { width: 100%; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: center; align-items: flex-start; padding: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow-x: auto; }
         
         #canvas { 
-            width: 1280px; height: 720px; 
+            width: 1280px; height: 720px; min-width: 1280px;
             background: linear-gradient(135deg, #e7cbf7 0%, #bce6f5 100%); 
             background-size: cover; background-position: center;
-            position: relative; transform-origin: top center; display: flex; flex-direction: column; align-items: center; padding-top: 40px; box-sizing: border-box; flex-shrink: 0; box-shadow: 0 0 40px rgba(0,0,0,0.5); 
+            position: relative; display: flex; flex-direction: column; align-items: center; padding-top: 40px; box-sizing: border-box; flex-shrink: 0; box-shadow: 0 0 40px rgba(0,0,0,0.5); 
         }
 
-        #controls-wrapper { width: 100%; max-width: 1280px; margin: -20px auto 0 auto; padding: 40px 30px; box-sizing: border-box; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 30px 30px 0 0; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 -10px 25px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+        #controls-wrapper { width: 100%; max-width: 1280px; margin: 0 auto; padding: 40px 30px; box-sizing: border-box; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 30px 30px 0 0; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 -10px 25px rgba(0,0,0,0.1); position: relative; z-index: 10; }
         h2 { color: #7d3c98; text-shadow: 2px 2px 0px rgba(255,255,255,0.7); font-size: 28px; border-bottom: 2px dashed #d7bde2; padding-bottom: 10px;}
         h3 { color: #c0392b; font-size: 20px; text-shadow: 1px 1px 0px rgba(255,255,255,0.8); }
 
         .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
 
-        .control-group { background: rgba(255, 255, 255, 0.6); padding: 20px; border-radius: 15px; box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.9); transition: transform 0.2s; }
+        .control-group { background: rgba(255, 255, 255, 0.6); padding: 20px; border-radius: 15px; box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.9); }
         .control-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 900; color: #d11149; }
-        .control-group input[type="text"], .control-group select { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #fecfef; background: rgba(255, 255, 255, 0.9); color: #333; box-sizing: border-box; font-family: inherit; font-weight: bold; outline: none; transition: 0.3s; }
+        .control-group input[type="text"], .control-group select { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #fecfef; background: rgba(255, 255, 255, 0.9); color: #333; box-sizing: border-box; font-family: inherit; font-weight: bold; outline: none; }
         .control-group input[type="file"] { font-size: 13px; margin-top: 5px; color: #555; width: 100%; font-weight: bold; }
         .control-group input[type="range"] { width: 100%; cursor: pointer; }
 
-        .btn-download { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(90deg, #5b86e5, #36d1dc); color: white; font-weight: 900; font-size: 18px; cursor: pointer; box-shadow: 0 6px 15px rgba(54,209,220,0.4); transition: 0.2s; margin-bottom: 20px; letter-spacing: 2px; }
-        .btn-download:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-download, .btn-action { width: 100%; padding: 15px; border: none; border-radius: 12px; color: white; font-weight: 900; font-size: 18px; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.15); transition: 0.2s; margin-bottom: 20px; letter-spacing: 2px; }
+        .btn-download { background: linear-gradient(90deg, #5b86e5, #36d1dc); }
+        .btn-reset-data { background: linear-gradient(90deg, #ff416c, #ff4b2b); margin-top: 10px; }
+        .btn-download:hover, .btn-action:hover { filter: brightness(1.1); }
 
         .top-title { background: #23164d; color: white; padding: 6px 25px; border-radius: 30px; font-size: 20px; font-weight: 900; border: 3px solid white; margin-bottom: 15px; letter-spacing: 2px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
         .rating-text { font-family: 'Mochiy Pop One', sans-serif; font-size: 85px; color: #2b115a; -webkit-text-stroke: 12px white; paint-order: stroke fill; text-shadow: 0px 8px 12px rgba(0,0,0,0.2); margin-bottom: 45px; }
@@ -115,16 +116,16 @@
     <div id="controls-wrapper">
         <button class="btn-download" onclick="downloadImage()">📸 點此下載高畫質 PNG</button>
         
-        <h2>✨ 全局設定 (背景、字體與大小調整)</h2>
+        <h2>✨ 全局設定與記憶功能</h2>
         <div class="settings-grid">
             <div class="control-group">
                 <label>自訂畫布背景 (上傳圖片)</label>
                 <input type="file" accept="image/*" onchange="loadBackground(event)">
-                <button class="btn-reset" onclick="resetBackground()" style="margin-top:10px; width:100%; padding:8px; border:none; border-radius:6px; background:#ff7eb3; color:white; font-weight:bold; cursor:pointer;">恢復預設粉紫背景</button>
+                <button class="btn-action" onclick="resetBackground()" style="margin-top:10px; padding:8px; background:#ff7eb3;">恢復預設粉紫背景</button>
             </div>
             <div class="control-group">
                 <label>整體全域字體選擇</label>
-                <select id="font-family-select" onchange="updateGlobalFont(this.value)">
+                <select id="font-family-select" onchange="updateGlobalFont(this.value); saveState();">
                     <option value="'Noto Sans JP', sans-serif">預設黑體 (Noto Sans JP)</option>
                     <option value="'Mochiy Pop One', sans-serif">日系街機圓體 (Mochiy Pop One)</option>
                     <option value="'Zen Maru Gothic', sans-serif">圓潤黑體 (Zen Maru Gothic)</option>
@@ -133,15 +134,15 @@
             </div>
             <div class="control-group">
                 <label>頂部 Title 大小調整 (<span id="title-size-val">20</span>px)</label>
-                <input type="range" min="14" max="36" value="20" oninput="updateTitleSize(this.value)">
+                <input type="range" id="input-title-size" min="14" max="36" value="20" oninput="updateTitleSize(this.value); saveState();">
             </div>
             <div class="control-group">
                 <label>Rating 大字大小調整 (<span id="rating-size-val">85</span>px)</label>
-                <input type="range" min="50" max="120" value="85" oninput="updateRatingSize(this.value)">
+                <input type="range" id="input-rating-size" min="50" max="120" value="85" oninput="updateRatingSize(this.value); saveState();">
             </div>
             <div class="control-group">
                 <label>顯示曲目數量 (1-3首)</label>
-                <select id="card-count" onchange="updateCardCount(this.value)">
+                <select id="card-count" onchange="updateCardCount(this.value); saveState();">
                     <option value="1">1 首</option>
                     <option value="2">2 首</option>
                     <option value="3" selected>3 首</option>
@@ -149,39 +150,31 @@
             </div>
             <div class="control-group">
                 <label>頂部文字</label>
-                <input type="text" value="✪✪✪✪✪ LC團九月份課題 ✪✪✪✪✪" oninput="document.getElementById('display-top').innerText = this.value">
+                <input type="text" id="input-top" value="✪✪✪✪✪ LC團九月份課題 ✪✪✪✪✪" oninput="document.getElementById('display-top').innerText = this.value; saveState();">
             </div>
             <div class="control-group">
                 <label>Rating 大字</label>
-                <input type="text" value="Rating 16400-16499" oninput="document.getElementById('display-rating').innerText = this.value">
+                <input type="text" id="input-rating" value="Rating 16400-16499" oninput="document.getElementById('display-rating').innerText = this.value; saveState();">
             </div>
             <div class="control-group">
                 <label>底部過關條件</label>
-                <input type="text" value="LIFE 80, GREAT 以下 -1" oninput="document.getElementById('display-condition').innerText = this.value">
+                <input type="text" id="input-condition" value="LIFE 80, GREAT 以下 -1" oninput="document.getElementById('display-condition').innerText = this.value; saveState();">
             </div>
         </div>
+        <button class="btn-action btn-reset-data" onclick="clearStorage()">🗑️ 清除所有記憶並重設</button>
 
         <h2>🎵 曲目設定</h2>
         <div class="cards-grid" id="card-controls-container"></div>
     </div>
 
     <script>
-        function scaleCanvas() {
-            const wrapper = document.getElementById('preview-wrapper');
-            const canvas = document.getElementById('canvas');
-            const scale = Math.min(window.innerWidth / 1280, 1) * 0.98;
-            canvas.style.transform = `scale(${scale})`;
-            wrapper.style.height = `${720 * scale + 40}px`;
-        }
-        window.addEventListener('resize', scaleCanvas);
-        setTimeout(scaleCanvas, 50);
-
         function loadBackground(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('canvas').style.background = `url(${e.target.result}) center/cover no-repeat`;
+                    localStorage.setItem('saved_bg', e.target.result);
                 }
                 reader.readAsDataURL(file);
             }
@@ -189,6 +182,7 @@
         
         function resetBackground() {
             document.getElementById('canvas').style.background = `linear-gradient(135deg, #e7cbf7 0%, #bce6f5 100%)`;
+            localStorage.removeItem('saved_bg');
         }
 
         function updateGlobalFont(fontFamily) {
@@ -207,34 +201,18 @@
 
         function downloadImage() {
             const canvasElement = document.getElementById('canvas');
-            const originalTransform = canvasElement.style.transform;
-            
-            // 截圖前暫時移除縮放與陰影偏移，確保 html2canvas 完美對齊
-            canvasElement.style.transform = 'none';
-            canvasElement.style.boxShadow = 'none';
-
-            html2canvas(canvasElement, { 
-                scale: 2, 
-                useCORS: true, 
-                backgroundColor: null,
-                windowWidth: 1280,
-                windowHeight: 720
-            }).then(canvas => {
+            html2canvas(canvasElement, { scale: 2, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'maimai_DX_banner.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                
-                // 恢復原狀
-                canvasElement.style.transform = originalTransform;
-                canvasElement.style.boxShadow = '0 0 40px rgba(0,0,0,0.5)';
             });
         }
 
         const defaultData = [
-            { diff: 'master', tab: 'dx', lv: '14+', title: 'In Chaos', artist: 'Tsukasa(Arte Refact)' },
-            { diff: 'remaster', tab: 'std', lv: '14', title: 'Oshama Scramble!', artist: 't+pazolite' },
-            { diff: 'master', tab: 'dx', lv: '14+', title: 'Straight into the lights', artist: 'Cranky' }
+            { diff: 'master', tab: 'dx', lv: '14+', title: 'In Chaos', artist: 'Tsukasa(Arte Refact)', cover: '' },
+            { diff: 'remaster', tab: 'std', lv: '14', title: 'Oshama Scramble!', artist: 't+pazolite', cover: '' },
+            { diff: 'master', tab: 'dx', lv: '14+', title: 'Straight into the lights', artist: 'Cranky', cover: '' }
         ];
 
         function buildSystem() {
@@ -244,63 +222,51 @@
             let cardsHTML = '';
 
             for (let i = 1; i <= 3; i++) {
-                let d = defaultData[i-1];
-                
                 controlsHTML += `
                 <div class="control-group card-control" id="control-${i}">
                     <h3 style="margin-top:0;">曲目 ${i}</h3>
                     <label>封面圖上傳</label>
                     <input type="file" accept="image/*" onchange="loadCover(event, ${i})">
                     <label style="margin-top:10px;">標籤類型</label>
-                    <select id="tab-select-${i}" onchange="updateTabStyle(${i}, this.value)">
-                        <option value="dx" ${d.tab==='dx'?'selected':''}>DX (でらっくす)</option>
-                        <option value="std" ${d.tab==='std'?'selected':''}>STD (スタンダード)</option>
+                    <select id="tab-select-${i}" onchange="updateTabStyle(${i}, this.value); saveState();">
+                        <option value="dx">DX (でらっくす)</option>
+                        <option value="std">STD (スタンダード)</option>
                     </select>
                     <label style="margin-top:10px;">邊框難度</label>
-                    <select onchange="updateDiff(${i}, this.value)">
-                        <option value="master" ${d.diff==='master'?'selected':''}>MASTER</option>
-                        <option value="remaster" ${d.diff==='remaster'?'selected':''}>Re:MASTER</option>
+                    <select id="diff-select-${i}" onchange="updateDiff(${i}, this.value); saveState();">
+                        <option value="master">MASTER</option>
+                        <option value="remaster">Re:MASTER</option>
                     </select>
                     <label style="margin-top:10px;">等級 (手打)</label>
-                    <input type="text" value="${d.lv}" oninput="updateLevel(${i}, this.value)">
+                    <input type="text" id="lv-input-${i}" oninput="updateLevel(${i}, this.value); saveState();">
                     <label style="margin-top:10px;">曲名</label>
-                    <input type="text" value="${d.title}" oninput="document.getElementById('title${i}').innerText = this.value">
+                    <input type="text" id="title-input-${i}" oninput="document.getElementById('title${i}').innerText = this.value; saveState();">
                     <label style="margin-top:10px;">作者</label>
-                    <input type="text" value="${d.artist}" oninput="document.getElementById('artist${i}').innerText = this.value">
+                    <input type="text" id="artist-input-${i}" oninput="document.getElementById('artist${i}').innerText = this.value; saveState();">
                 </div>`;
-
-                let isMaster = d.diff === 'master';
-                let isDx = d.tab === 'dx';
                 
                 cardsHTML += `
-                <div class="card ${isMaster?'master':'remaster'} ${isDx?'dx-type':'std-type'}" id="card${i}" style="display:none;">
-                    <div class="tab-box ${isDx?'dx':'std'}" id="tab-container-${i}">
-                        <span>${isDx ? 'でらっくす' : 'スタンダード'}</span>
+                <div class="card master dx-type" id="card${i}" style="display:none;">
+                    <div class="tab-box dx" id="tab-container-${i}">
+                        <span>でらっくす</span>
                     </div>
                     <div class="cover-area" id="cover${i}">上傳圖片即可預覽</div>
                     <div class="diff-band">
-                        <div class="diff-name" id="diffName${i}">${isMaster?'MASTER':'Re:MASTER'}</div>
+                        <div class="diff-name" id="diffName${i}">MASTER</div>
                         <div class="diff-level" id="level${i}">
-                            <span class="lv">Lv</span><span class="num">${d.lv.replace('+','')}</span>${d.lv.includes('+')?'<span class="plus">+</span>':''}
+                            <span class="lv">Lv</span><span class="num">14</span><span class="plus">+</span>
                         </div>
                     </div>
                     <div class="song-title-box">
-                        <div class="song-title" id="title${i}">${d.title}</div>
-                        <div class="song-artist" id="artist${i}">${d.artist}</div>
+                        <div class="song-title" id="title${i}"></div>
+                        <div class="song-artist" id="artist${i}"></div>
                     </div>
                 </div>`;
             }
 
             controlsContainer.innerHTML = controlsHTML;
             cardsContainer.innerHTML = cardsHTML;
-            updateCardCount(3); 
-        }
-
-        function updateCardCount(num) {
-            for (let i = 1; i <= 3; i++) {
-                document.getElementById('card' + i).style.display = (i <= num) ? 'flex' : 'none';
-                document.getElementById('control-' + i).style.display = (i <= num) ? 'block' : 'none';
-            }
+            loadState();
         }
 
         function loadCover(event, id) {
@@ -311,8 +277,112 @@
                     const coverDiv = document.getElementById('cover' + id);
                     coverDiv.style.backgroundImage = `url(${e.target.result})`;
                     coverDiv.innerText = ''; 
+                    localStorage.setItem(`saved_cover_${id}`, e.target.result);
                 }
                 reader.readAsDataURL(file);
+            }
+        }
+
+        function saveState() {
+            const state = {
+                cardCount: document.getElementById('card-count').value,
+                topText: document.getElementById('input-top').value,
+                ratingText: document.getElementById('input-rating').value,
+                conditionText: document.getElementById('input-condition').value,
+                titleSize: document.getElementById('input-title-size').value,
+                ratingSize: document.getElementById('input-rating-size').value,
+                fontFamily: document.getElementById('font-family-select').value,
+                songs: []
+            };
+
+            for (let i = 1; i <= 3; i++) {
+                state.songs.push({
+                    tab: document.getElementById(`tab-select-${i}`).value,
+                    diff: document.getElementById(`diff-select-${i}`).value,
+                    lv: document.getElementById(`lv-input-${i}`).value,
+                    title: document.getElementById(`title-input-${i}`).value,
+                    artist: document.getElementById(`artist-input-${i}`).value
+                });
+            }
+            localStorage.setItem('maimai_generator_state', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('maimai_generator_state');
+            const bg = localStorage.getItem('saved_bg');
+
+            if (bg) {
+                document.getElementById('canvas').style.background = `url(${bg}) center/cover no-repeat`;
+            }
+
+            let data = saved ? JSON.parse(saved) : null;
+
+            // 如果沒有儲存過，就塞入預設值
+            if (!data) {
+                data = {
+                    cardCount: '3',
+                    topText: '✪✪✪✪✪ LC團九月份課題 ✪✪✪✪✪',
+                    ratingText: 'Rating 16400-16499',
+                    conditionText: 'LIFE 80, GREAT 以下 -1',
+                    titleSize: '20',
+                    ratingSize: '85',
+                    fontFamily: "'Noto Sans JP', sans-serif",
+                    songs: defaultData
+                };
+            }
+
+            document.getElementById('card-count').value = data.cardCount;
+            document.getElementById('input-top').value = data.topText;
+            document.getElementById('input-rating').value = data.ratingText;
+            document.getElementById('input-condition').value = data.conditionText;
+            document.getElementById('input-title-size').value = data.titleSize;
+            document.getElementById('input-rating-size').value = data.ratingSize;
+            document.getElementById('font-family-select').value = data.fontFamily;
+
+            document.getElementById('display-top').innerText = data.topText;
+            document.getElementById('display-rating').innerText = data.ratingText;
+            document.getElementById('display-condition').innerText = data.conditionText;
+
+            updateTitleSize(data.titleSize);
+            updateRatingSize(data.ratingSize);
+            updateGlobalFont(data.fontFamily);
+            updateCardCount(data.cardCount);
+
+            for (let i = 1; i <= 3; i++) {
+                let s = data.songs[i-1];
+                document.getElementById(`tab-select-${i}`).value = s.tab;
+                document.getElementById(`diff-select-${i}`).value = s.diff;
+                document.getElementById(`lv-input-${i}`).value = s.lv;
+                document.getElementById(`title-input-${i}`).value = s.title;
+                document.getElementById(`artist-input-${i}`).value = s.artist;
+
+                document.getElementById(`title${i}`).innerText = s.title;
+                document.getElementById(`artist${i}`).innerText = s.artist;
+
+                updateTabStyle(i, s.tab);
+                updateDiff(i, s.diff);
+                updateLevel(i, s.lv);
+
+                const savedCover = localStorage.getItem(`saved_cover_${i}`);
+                if (savedCover) {
+                    const coverDiv = document.getElementById('cover' + i);
+                    coverDiv.style.backgroundImage = `url(${savedCover})`;
+                    coverDiv.innerText = '';
+                }
+            }
+        }
+
+        function clearStorage() {
+            if (confirm("確定要清除所有記憶並重設嗎？")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        function updateCardCount(num) {
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById('card' + i).style.display = (i <= num) ? 'flex' : 'none';
+                document.getElementById('control-' + i).style.display = (i <= num) ? 'block' : 'none';
             }
         }
 

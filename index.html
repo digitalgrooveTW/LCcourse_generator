@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>maimai DX 課題曲生成器 - 完整自訂版</title>
+    <title>maimai DX 課題曲生成器 - 截圖完美對齊版</title>
     <!-- 引入多種可選字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Noto+Sans+JP:wght@700;900&family=Zen+Maru+Gothic:wght@700;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -208,13 +208,26 @@
         function downloadImage() {
             const canvasElement = document.getElementById('canvas');
             const originalTransform = canvasElement.style.transform;
+            
+            // 截圖前暫時移除縮放與陰影偏移，確保 html2canvas 完美對齊
             canvasElement.style.transform = 'none';
-            html2canvas(canvasElement, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+            canvasElement.style.boxShadow = 'none';
+
+            html2canvas(canvasElement, { 
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: null,
+                windowWidth: 1280,
+                windowHeight: 720
+            }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'maimai_DX_banner.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
+                
+                // 恢復原狀
                 canvasElement.style.transform = originalTransform;
+                canvasElement.style.boxShadow = '0 0 40px rgba(0,0,0,0.5)';
             });
         }
 
